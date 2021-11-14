@@ -35,4 +35,4 @@ var displayWeather = function(weatherInfo, city) {
     console.log(weatherInfo);
 }
 
-getWeather();
+// getWeather();
