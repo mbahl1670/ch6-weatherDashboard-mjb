@@ -4,13 +4,13 @@ var apiKey = "b8f1c6d27f4bce759e26a007c1ce4b0d";
 var fiveDayForcastEl = document.querySelector("#forcast");
 
 
-var getWeather = function () {
+var getWeather = function (city) {
     // the endpoint we need to use for OpenWeather is the One Call Api.  However, this uses the latitude and longitude of a city.
     // the Current Weather API lets us use a city name and will provide the lat & lon for that city
     // perforing 2 API Calls, one to obtain the lat&long of the selected city, then another using that lat&lon to get the 
     // weather information we need for the app
 
-    var apiCity = "Minneapolis"; // city that is going to be searched
+    var apiCity = city; // city that is going to be searched
     // Current Weather API allows us to use a city name
     var apiLatLong = "https://api.openweathermap.org/data/2.5/weather?q=" + apiCity + "&appid=b8f1c6d27f4bce759e26a007c1ce4b0d";
 
@@ -57,7 +57,28 @@ var displayWeather = function (weatherInfo, city) {
     }   
 }
 
-getWeather();
+// this is the function that will be called when you click the search button
+var citySearch = function(city) {
+    getWeather(city);
+}
+
+
+
+// event handler for when the search button is clicked
+$("#searchBtn").on("click", function(event) {
+    var newCity = $("#citySearch").val().trim();
+    citySearch(newCity);
+});
+
+// When the input area for a city is clicked, it will clear the placeholder or whatever is currently
+// there.  If you click away from the input area without putting anything in, the placeholder appears again
+$("#citySearch").on("click", function() {
+    $("#citySearch").attr("placeholder", "").val("");
+}).on("blur", function() {
+    $("#citySearch").attr("placeholder", "Type a City Name Here")
+});
+
+
 
 // for (var i = 1; i < 6; i++) {
     //         $('#forecast').append(`
