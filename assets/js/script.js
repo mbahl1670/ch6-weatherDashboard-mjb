@@ -1,7 +1,6 @@
 var apiKey = "b8f1c6d27f4bce759e26a007c1ce4b0d";
 // OpenWeather info:  email: mbahl1670@gmail.com  password:  bootcamp
 
-var fiveDayForcastEl = document.querySelector("#forcast");
 var searchHistory = [];
 
 
@@ -34,6 +33,7 @@ var getWeather = function (city) {
                     };
                     searchHistory.push(citySearch);
                     updateHistory(apiCity);
+                    $("#citySearch").val("");
                 });
             });
         });
@@ -43,6 +43,7 @@ var getWeather = function (city) {
 var displayWeather = function (weatherInfo, city) {
     console.log(weatherInfo);
     
+    $("img").show();
     $("#cityName").text(city);
     $("#currentDate").text("(" + moment.unix(weatherInfo.current.dt).format("MM/DD/YYYY") + ")");   // tutor Jared Jawed helped with the conversion from 
     var weatherIcon = weatherInfo.current.weather[0].icon;
@@ -65,11 +66,6 @@ var displayWeather = function (weatherInfo, city) {
         $("#day" + i + "Humidity").text(weatherInfo.daily[i].humidity + " %");
     }   
 }
-
-// this is the function that will be called when you click the search button
-// var citySearch = function(city) {
-//     getWeather(city);
-// }
 
 var updateHistory = function(city) {
     var newCityHistory = $("<li>").addClass("mt-1 btn history-btn").text(city);
@@ -94,7 +90,10 @@ $("#citySearch").on("click", function() {
     $("#citySearch").attr("placeholder", "Type a City Name Here")
 });
 
-
+window.onload = function() {
+    console.log("hiding");
+    $("img").hide();
+}
 
 // for (var i = 1; i < 6; i++) {
     //         $('#forecast').append(`
