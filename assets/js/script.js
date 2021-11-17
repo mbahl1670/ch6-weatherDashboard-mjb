@@ -2,6 +2,7 @@ var apiKey = "b8f1c6d27f4bce759e26a007c1ce4b0d";
 // OpenWeather info:  email: mbahl1670@gmail.com  password:  bootcamp
 
 var fiveDayForcastEl = document.querySelector("#forcast");
+var searchHistory = [];
 
 
 var getWeather = function (city) {
@@ -25,6 +26,14 @@ var getWeather = function (city) {
             fetch(apiUrl).then(function (response) {
                 response.json().then(function (data) {
                     displayWeather(data, apiCity);
+                                      
+                    var citySearch = {
+                        city:  apiCity, 
+                        latitude:  varLatitude, 
+                        longitude:  varLongitude
+                    };
+                    searchHistory.push(citySearch);
+                    updateHistory(apiCity);
                 });
             });
         });
@@ -58,16 +67,23 @@ var displayWeather = function (weatherInfo, city) {
 }
 
 // this is the function that will be called when you click the search button
-var citySearch = function(city) {
-    getWeather(city);
+// var citySearch = function(city) {
+//     getWeather(city);
+// }
+
+var updateHistory = function(city) {
+    var newCityHistory = $("<li>").addClass("mt-1 btn history-btn").text(city);
+    $("#searchHistory").prepend(newCityHistory);
 }
-
-
 
 // event handler for when the search button is clicked
 $("#searchBtn").on("click", function(event) {
     var newCity = $("#citySearch").val().trim();
-    citySearch(newCity);
+    if (!newCity) {
+        alert("Please enter the name of a city");
+        return;
+    }
+    getWeather(newCity);
 });
 
 // When the input area for a city is clicked, it will clear the placeholder or whatever is currently
