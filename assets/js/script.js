@@ -70,6 +70,18 @@ var displayWeather = function (weatherInfo, city) {
     $("#currentWind").text(weatherInfo.current.wind_speed + " MPH");
     $("#currentHumidity").text(weatherInfo.current.humidity + " %");
     $("#currentUV").text(weatherInfo.current.uvi);
+    var index = weatherInfo.current.uvi;
+    console.log(index);
+    // set UV index to a color indication favorable (green), moderate(orange) or severe(red)
+    $("#currentUV").removeClass();
+    if (index >= 0 && index < 3) {
+        $("#currentUV").addClass("uv-favorable");
+    } else if ( index >= 3 && index < 8) {
+        $("#currentUV").addClass("uv-moderate");
+    } else if (index >= 8) {
+        $("#currentUV").addClass("uv-severe");
+    }
+    
 
     // using a for loop to fill in the 5 day forecast
     for (i=1; i<6; i++) {
@@ -121,7 +133,6 @@ $("#citySearch").on("click", function() {
 // the blank image icons and alt descriptions bothered me, hiding them until they are needed
 // not sure why, but was not able to hide the entire 5 day forecast
 window.onload = function() {
-    console.log("hiding");
     $("img").hide();
 }
 

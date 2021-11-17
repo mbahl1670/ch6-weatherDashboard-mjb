@@ -7,6 +7,27 @@
     background-color: lightgray;
 }
 
+.uv-favorable{
+    padding: 0 5px 0 5px;
+    background-color: green;
+    border-radius: 5px;
+    color: white;
+}
+
+.uv-moderate{
+    padding: 0 5px 0 5px;
+    background-color: orange;
+    border-radius: 5px;
+    color: white;
+}
+
+.uv-severe{
+    padding: 0 5px 0 5px;
+    background-color: red;
+    border-radius: 5px;
+    color: white;
+}
+
 .forCard {
     background-color: #39454f;
     color: white;
