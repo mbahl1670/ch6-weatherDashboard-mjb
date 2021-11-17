@@ -31,8 +31,17 @@ var getWeather = function (city) {
                         latitude:  varLatitude, 
                         longitude:  varLongitude
                     };
-                    searchHistory.push(citySearch);
-                    updateHistory(apiCity);
+                    
+                    var newCity = true;
+                    for (i = 0; i < searchHistory.length; i++) {
+                        if (apiCity == searchHistory[i].city) {
+                            newCity = false;
+                        }
+                    }
+                    if (newCity) {
+                        searchHistory.push(citySearch);
+                        updateHistory(apiCity);
+                    }
                     $("#citySearch").val("");
                 });
             });
@@ -81,6 +90,13 @@ $("#searchBtn").on("click", function(event) {
     }
     getWeather(newCity);
 });
+
+$("#searchHistory").on("click", "li", function() {
+    console.log("city in search history clicked");
+    var searchHistoryCity = $(this).text();
+    getWeather(searchHistoryCity);
+});
+
 
 // When the input area for a city is clicked, it will clear the placeholder or whatever is currently
 // there.  If you click away from the input area without putting anything in, the placeholder appears again
