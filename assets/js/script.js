@@ -25,13 +25,18 @@ var getWeather = function (city) {
             fetch(apiUrl).then(function (response) {
                 response.json().then(function (data) {
                     displayWeather(data, apiCity);
-                                      
+                    
+                    // capture the city and lat&lon to be added to the search history
                     var citySearch = {
                         city:  apiCity, 
                         latitude:  varLatitude, 
                         longitude:  varLongitude
                     };
                     
+                    // testing to see if the current city being searched for is already in the 
+                    // search history or not. When the city being seached is a new city
+                    // the array citySearch (containg the name, lat&long of the city) will be added
+                    // to the searchHistory object
                     var newCity = true;
                     for (i = 0; i < searchHistory.length; i++) {
                         if (apiCity == searchHistory[i].city) {
@@ -42,13 +47,15 @@ var getWeather = function (city) {
                         searchHistory.push(citySearch);
                         updateHistory(apiCity);
                     }
-                    $("#citySearch").val("");
+                    $("#citySearch").val(""); // clear the value of what was typed in the search bar
                 });
             });
         });
     });
 }
 
+
+// function being used to display the obtained weather information onto the screen
 var displayWeather = function (weatherInfo, city) {
     console.log(weatherInfo);
     
@@ -76,6 +83,7 @@ var displayWeather = function (weatherInfo, city) {
     }   
 }
 
+// this function will only be called if the searched for city is a new city not already in the search history
 var updateHistory = function(city) {
     var newCityHistory = $("<li>").addClass("mt-1 btn history-btn").text(city);
     $("#searchHistory").prepend(newCityHistory);
@@ -91,6 +99,9 @@ $("#searchBtn").on("click", function(event) {
     getWeather(newCity);
 });
 
+// event handler for if an item in the #searchHistory is clicked and is list item (which are created dynamically)
+// when a list item in the search history is called the getWeather will be performed for 
+// the city that is saved in the list item
 $("#searchHistory").on("click", "li", function() {
     console.log("city in search history clicked");
     var searchHistoryCity = $(this).text();
@@ -106,11 +117,19 @@ $("#citySearch").on("click", function() {
     $("#citySearch").attr("placeholder", "Type a City Name Here")
 });
 
+
+// the blank image icons and alt descriptions bothered me, hiding them until they are needed
+// not sure why, but was not able to hide the entire 5 day forecast
 window.onload = function() {
     console.log("hiding");
     $("img").hide();
 }
 
+
+
+
+// CODE I WAS WORKING ON WITH MY TUTOR, NOT BEING USED, BUT i MAY WANT TO LOOK OVER IT AGAIN
+// AT SOME POINT IN THE FUTURE
 // for (var i = 1; i < 6; i++) {
     //         $('#forecast').append(`
     //         <div class="col-lg-4 col-md-2 card">

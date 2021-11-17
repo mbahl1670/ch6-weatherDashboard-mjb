@@ -1,3 +1,14 @@
+.dashboard {
+    background-image: linear-gradient(to right, blue, darkblue);
+    font-weight: bold;
+}
+
 .history-btn {
     background-color: lightgray;
+}
+
+.forCard {
+    background-color: #39454f;
+    color: white;
+    min-height: 200px;
 }
