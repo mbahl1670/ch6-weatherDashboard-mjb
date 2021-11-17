@@ -17,7 +17,6 @@ var getWeather = function (city) {
     fetch(apiLatLong).then(function (response) {
         response.json().then(function (data) {
             // obtian the lat&long of the selected city and put into a variable
-            console.log(data.name);
             varLatitude = data.coord.lat;
             varLongitude = data.coord.lon;
             // the apiCall needed for OneCall API endpoint, using the lat&lon obtained from the first call
@@ -57,7 +56,6 @@ var getWeather = function (city) {
 
 // function being used to display the obtained weather information onto the screen
 var displayWeather = function (weatherInfo, city) {
-    console.log(weatherInfo);
     
     $("img").show();
     $("#cityName").text(city);
@@ -71,7 +69,6 @@ var displayWeather = function (weatherInfo, city) {
     $("#currentHumidity").text(weatherInfo.current.humidity + " %");
     $("#currentUV").text(weatherInfo.current.uvi);
     var index = weatherInfo.current.uvi;
-    console.log(index);
     // set UV index to a color indication favorable (green), moderate(orange) or severe(red)
     $("#currentUV").removeClass();
     if (index >= 0 && index < 3) {
@@ -115,7 +112,6 @@ $("#searchBtn").on("click", function(event) {
 // when a list item in the search history is called the getWeather will be performed for 
 // the city that is saved in the list item
 $("#searchHistory").on("click", "li", function() {
-    console.log("city in search history clicked");
     var searchHistoryCity = $(this).text();
     getWeather(searchHistoryCity);
 });

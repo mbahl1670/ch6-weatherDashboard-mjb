@@ -1,12 +1,15 @@
+/* custom style for the weather dashboard banner on top */
 .dashboard {
     background-image: linear-gradient(to right, blue, darkblue);
     font-weight: bold;
 }
 
+/* custom style for the search history cities/buttons */
 .history-btn {
     background-color: lightgray;
 }
 
+/* Styles for the UV index */
 .uv-favorable{
     padding: 0 5px 0 5px;
     background-color: green;
@@ -28,6 +31,7 @@
     color: white;
 }
 
+/* Custom styles for the 5-day forcast cards */
 .forCard {
     background-color: #39454f;
     color: white;
