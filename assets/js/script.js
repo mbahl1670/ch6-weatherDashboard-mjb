@@ -37,14 +37,19 @@ var getWeather = function (city) {
                     // the array citySearch (containg the name, lat&long of the city) will be added
                     // to the searchHistory object
                     var newCity = true;
-                    for (i = 0; i < searchHistory.length; i++) {
-                        if (apiCity == searchHistory[i].city) {
-                            newCity = false;
+                    
+                    if (searchHistory) {
+                        for (i = 0; i < searchHistory.length; i++) {
+                            if (apiCity == searchHistory[i].city) {
+                                newCity = false;
+                            }
                         }
                     }
+
                     if (newCity) {
                         searchHistory.push(citySearch);
                         updateHistory(apiCity);
+                        localStorage.setItem("history", JSON.stringify(searchHistory));
                     }
                     $("#citySearch").val(""); // clear the value of what was typed in the search bar
                 });
@@ -52,6 +57,7 @@ var getWeather = function (city) {
         });
     });
 }
+
 
 
 // function being used to display the obtained weather information onto the screen
@@ -106,12 +112,13 @@ $("#searchBtn").on("click", function(event) {
         return;
     }
     getWeather(newCity);
+    
 });
 
 // event handler for if an item in the #searchHistory is clicked and is list item (which are created dynamically)
 // when a list item in the search history is called the getWeather will be performed for 
 // the city that is saved in the list item
-$("#searchHistory").on("click", "li", function() {
+$("#searchHistory").on("click", "li", function() { 
     var searchHistoryCity = $(this).text();
     getWeather(searchHistoryCity);
 });
@@ -125,11 +132,27 @@ $("#citySearch").on("click", function() {
     $("#citySearch").attr("placeholder", "Type a City Name Here")
 });
 
+var clearHistory = function() {
+    searchHistory = [];
+    localStorage.setItem("history", JSON.stringify(searchHistory));
+}
+
 
 // the blank image icons and alt descriptions bothered me, hiding them until they are needed
 // not sure why, but was not able to hide the entire 5 day forecast
 window.onload = function() {
     $("img").hide();
+    searchHistory = JSON.parse(localStorage.getItem("history"));
+    if (searchHistory) {
+        for ( i = 0; i < searchHistory.length; i++) {
+            updateHistory(searchHistory[i].city);
+        }
+    }
+    else {
+        searchHistory = [];
+    }
+        
+     
 }
 
 
