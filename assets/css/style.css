@@ -8,6 +8,10 @@
 .history-btn {
     background-color: lightgray;
 }
+/* hover effecs when scrolling over city in search history */
+.history-btn:hover {
+    background-color: darkgrey;
+}
 
 /* Styles for the UV index */
 .uv-favorable{
@@ -37,3 +41,4 @@
     color: white;
     min-height: 200px;
 }
+

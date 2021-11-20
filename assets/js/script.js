@@ -47,7 +47,7 @@ var getWeather = function (city) {
                     }
 
                     if (newCity) {
-                        if (searchHistory.length < 6) {
+                        if (searchHistory.length < 7) {
                             searchHistory.push(citySearch);
                             updateHistory(apiCity);
                             localStorage.setItem("history", JSON.stringify(searchHistory));
@@ -123,9 +123,12 @@ $("#searchBtn").on("click", function(event) {
     if (!newCity) {
         alert("Please enter the name of a city");
         return;
+    } else if (newCity === "clear()" ) {
+        clearHistory();
+        location.reload();
+    } else {
+        getWeather(newCity);
     }
-    getWeather(newCity);
-    
 });
 
 // event handler for if an item in the #searchHistory is clicked and is list item (which are created dynamically)
@@ -135,7 +138,6 @@ $("#searchHistory").on("click", "li", function() {
     var searchHistoryCity = $(this).text();
     getWeather(searchHistoryCity);
 });
-
 
 // When the input area for a city is clicked, it will clear the placeholder or whatever is currently
 // there.  If you click away from the input area without putting anything in, the placeholder appears again
@@ -160,7 +162,8 @@ window.onload = function() {
         for ( i = 0; i < searchHistory.length; i++) {
             updateHistory(searchHistory[i].city);
         }
-        getWeather(searchHistory[5].city);
+        var lastCitySaved = searchHistory.length - 1;
+        getWeather(searchHistory[lastCitySaved].city);
     }
     else {
         searchHistory = [];
