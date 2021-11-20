@@ -47,9 +47,22 @@ var getWeather = function (city) {
                     }
 
                     if (newCity) {
-                        searchHistory.push(citySearch);
-                        updateHistory(apiCity);
-                        localStorage.setItem("history", JSON.stringify(searchHistory));
+                        if (searchHistory.length < 6) {
+                            searchHistory.push(citySearch);
+                            updateHistory(apiCity);
+                            localStorage.setItem("history", JSON.stringify(searchHistory));
+                        }
+                        else {
+                            
+                            searchHistory.splice(0,1);
+                            searchHistory.push(citySearch);
+                            $("#searchHistory").html("");
+                            for ( i = 0; i < searchHistory.length; i++) {
+                                updateHistory(searchHistory[i].city);
+                            }
+                            
+                            localStorage.setItem("history", JSON.stringify(searchHistory));
+                        }
                     }
                     $("#citySearch").val(""); // clear the value of what was typed in the search bar
                 });
@@ -147,6 +160,7 @@ window.onload = function() {
         for ( i = 0; i < searchHistory.length; i++) {
             updateHistory(searchHistory[i].city);
         }
+        getWeather(searchHistory[5].city);
     }
     else {
         searchHistory = [];
