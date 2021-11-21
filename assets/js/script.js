@@ -15,59 +15,67 @@ var getWeather = function (city) {
     var apiLatLong = "https://api.openweathermap.org/data/2.5/weather?q=" + apiCity + "&appid=b8f1c6d27f4bce759e26a007c1ce4b0d";
 
     fetch(apiLatLong).then(function (response) {
-        response.json().then(function (data) {
-            // obtian the lat&long of the selected city and put into a variable
-            varLatitude = data.coord.lat;
-            varLongitude = data.coord.lon;
-            // the apiCall needed for OneCall API endpoint, using the lat&lon obtained from the first call
-            var apiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + varLatitude + "&lon=" + varLongitude + "&exclude=minutely,hourly,alerts&units=imperial&appid=b8f1c6d27f4bce759e26a007c1ce4b0d";
-            fetch(apiUrl).then(function (response) {
-                response.json().then(function (data) {
-                    displayWeather(data, apiCity);
-                    
-                    // capture the city and lat&lon to be added to the search history
-                    var citySearch = {
-                        city:  apiCity, 
-                        latitude:  varLatitude, 
-                        longitude:  varLongitude
-                    };
-                    
-                    // testing to see if the current city being searched for is already in the 
-                    // search history or not. When the city being seached is a new city
-                    // the array citySearch (containg the name, lat&long of the city) will be added
-                    // to the searchHistory object
-                    var newCity = true;
-                    
-                    if (searchHistory) {
-                        for (i = 0; i < searchHistory.length; i++) {
-                            if (apiCity == searchHistory[i].city) {
-                                newCity = false;
+        if (response.ok) {
+            response.json().then(function (data) {
+                // obtian the lat&long of the selected city and put into a variable
+                varLatitude = data.coord.lat;
+                varLongitude = data.coord.lon;
+                // the apiCall needed for OneCall API endpoint, using the lat&lon obtained from the first call
+                var apiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + varLatitude + "&lon=" + varLongitude + "&exclude=minutely,hourly,alerts&units=imperial&appid=b8f1c6d27f4bce759e26a007c1ce4b0d";
+                fetch(apiUrl).then(function (response) {
+                    response.json().then(function (data) {
+                        displayWeather(data, apiCity);
+                        
+                        // capture the city and lat&lon to be added to the search history
+                        var citySearch = {
+                            city:  apiCity, 
+                            latitude:  varLatitude, 
+                            longitude:  varLongitude
+                        };
+                        
+                        // testing to see if the current city being searched for is already in the 
+                        // search history or not. When the city being seached is a new city
+                        // the array citySearch (containg the name, lat&long of the city) will be added
+                        // to the searchHistory object
+                        var newCity = true;
+                        
+                        if (searchHistory) {
+                            for (i = 0; i < searchHistory.length; i++) {
+                                if (apiCity == searchHistory[i].city) {
+                                    newCity = false;
+                                }
                             }
                         }
-                    }
 
-                    if (newCity) {
-                        if (searchHistory.length < 7) {
-                            searchHistory.push(citySearch);
-                            updateHistory(apiCity);
-                            localStorage.setItem("history", JSON.stringify(searchHistory));
-                        }
-                        else {
-                            
-                            searchHistory.splice(0,1);
-                            searchHistory.push(citySearch);
-                            $("#searchHistory").html("");
-                            for ( i = 0; i < searchHistory.length; i++) {
-                                updateHistory(searchHistory[i].city);
+                        if (newCity) {
+                            if (searchHistory.length < 7) {
+                                searchHistory.push(citySearch);
+                                updateHistory(apiCity);
+                                localStorage.setItem("history", JSON.stringify(searchHistory));
                             }
-                            
-                            localStorage.setItem("history", JSON.stringify(searchHistory));
+                            else {
+                                
+                                searchHistory.splice(0,1);
+                                searchHistory.push(citySearch);
+                                $("#searchHistory").html("");
+                                for ( i = 0; i < searchHistory.length; i++) {
+                                    updateHistory(searchHistory[i].city);
+                                }
+                                
+                                localStorage.setItem("history", JSON.stringify(searchHistory));
+                            }
                         }
-                    }
-                    $("#citySearch").val(""); // clear the value of what was typed in the search bar
+                        $("#citySearch").val(""); // clear the value of what was typed in the search bar
+                    });
                 });
             });
-        });
+        }   else {
+            alert("City not found!  Please try again.");
+            $("#citySearch").val("");
+        }
+    })
+    .catch(function(error) {
+        alert("Error:  Open Weather not available!");
     });
 }
 
@@ -163,7 +171,11 @@ window.onload = function() {
             updateHistory(searchHistory[i].city);
         }
         var lastCitySaved = searchHistory.length - 1;
-        getWeather(searchHistory[lastCitySaved].city);
+        if (lastCitySaved === -1) {
+            return;
+        } else {
+             getWeather(searchHistory[lastCitySaved].city);
+        }
     }
     else {
         searchHistory = [];
